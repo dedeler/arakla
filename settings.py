@@ -63,7 +63,7 @@ IMAP_USE_TLS = False
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Istanbul'
 
 SITE_ID = 1
 
