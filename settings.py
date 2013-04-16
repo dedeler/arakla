@@ -138,7 +138,7 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
 #TEMPLATE_DIRS = (,) #template have no effect in askbot, use the variable below
-#ASKBOT_EXTRA_SKINS_DIR = #path to your private skin collection
+ASKBOT_EXTRA_SKINS_DIR = "skins"
 #take a look here http://askbot.org/en/question/207/
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.sitemaps',
+    'django.contrib.messages',
     #'debug_toolbar',
     #Optional, to enable haystack search
     #'haystack',
@@ -179,9 +180,12 @@ INSTALLED_APPS = (
     'followit',
     'tinymce',
     'group_messaging',
+    'compressor',
+
     #'avatar',#experimental use git clone git://github.com/ericflo/django-avatar.git$
 )
 
+JINJA2_EXTENSIONS = ('compressor.contrib.jinja2ext.CompressorExtension',)
 
 #setup memcached for production use!
 #see http://docs.djangoproject.com/en/1.1/topics/cache/ for details
@@ -236,9 +240,20 @@ CSRF_COOKIE_NAME = '_csrf'
 #https://docs.djangoproject.com/en/1.3/ref/contrib/csrf/
 #CSRF_COOKIE_DOMAIN = DOMAIN_NAME
 
+ASKBOT_CSS_DEVEL = True
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
+
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
 STATICFILES_DIRS = (
     ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
+    ASKBOT_EXTRA_SKINS_DIR
+)
+STATICFILES_FINDERS = (
+    "compressor.finders.CompressorFinder",
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
 RECAPTCHA_USE_SSL = True
