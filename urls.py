@@ -7,18 +7,31 @@ from django.conf.urls.defaults import handler500
 from django.conf.urls.defaults import include
 from django.conf.urls.defaults import patterns
 from django.conf.urls.defaults import url
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy, string_concat
 from django.conf import settings
 from django.contrib import admin
+from askbot import views
+import forms
 
 admin.autodiscover()
 
+urlpatterns = patterns('',
+    url(
+        r'^questions/(?P<id>\d+)/answer/$',
+        views.writers.answer,
+        { 'form_class': forms.GanswerForm, },
+        name='answer'
+    ),
+)
+
 if getattr(settings, 'ASKBOT_MULTILINGUAL', False) == True:
     from django.conf.urls.i18n import i18n_patterns
-    urlpatterns = i18n_patterns('',
+    urlpatterns += i18n_patterns('',
         (r'%s' % settings.ASKBOT_URL, include('askbot.urls'))
     )
 else:
-    urlpatterns = patterns('',
+    urlpatterns += patterns('',
         (r'%s' % settings.ASKBOT_URL, include('askbot.urls'))
     )
 
